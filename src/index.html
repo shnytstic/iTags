@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iTags</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── Toolbar (also the window drag region) ── -->
+  <header class="toolbar">
+    <div class="tb-left">
+      <span class="app-name">iTags</span>
+      <button class="tb-btn primary" id="addBtn" tabindex="-1" title="Add audio files (Ctrl/Cmd+O)">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add
+      </button>
+    </div>
+    <div class="tb-right">
+      <button class="tb-btn" id="trackSearchBtn" tabindex="-1" title="Find track info online (Ctrl/Cmd+F)">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Find track
+      </button>
+      <button class="tb-btn" id="previewTagsBtn" tabindex="-1" title="Preview tags (Ctrl/Cmd+P)">
+        <svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg>Preview
+      </button>
+      <span class="tb-sep"></span>
+      <button class="tb-icon" id="settingsBtn" tabindex="-1" title="Settings (Ctrl/Cmd+,)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+      <button class="tb-icon" id="themeToggle" tabindex="-1">
+        <svg class="ico-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Sidebar: queue ── -->
+  <aside class="sidebar" id="audioZone">
+    <div class="side-head">
+      <span class="side-title">Queue</span>
+      <span class="count" id="queueCount"></span>
+      <input type="file" id="audioInput" accept="audio/mpeg,audio/mp3,.mp3,.flac,.wav,.m4a,.aac" multiple hidden>
+    </div>
+    <div class="queue-list" id="queueList"></div>
+    <div class="side-foot">
+      <button class="side-btn" id="convertQueueBtn" disabled tabindex="-1" title="Convert every file in the queue to one format">
+        <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>Convert queue
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main editor ── -->
+  <main class="main">
+    <div class="main-scroll">
+
+      <div class="empty-main">
+        <div class="empty-main-ico">♫</div>
+        <h2>Edit tags on your music</h2>
+        <p>Add MP3, M4A, FLAC or WAV files to edit titles, artwork, lyrics and more. Everything happens on your computer.</p>
+        <button class="btn-primary" id="emptyAddBtn" tabindex="-1">Add audio files</button>
+        <span class="hint-line">or drop them anywhere in this window</span>
+      </div>
+
+      <div class="editor">
+
+        <section class="hero">
+          <div class="cover-col">
+            <div class="cover-drop" id="coverZone">
+              <input type="file" id="coverInput" accept="image/jpeg,image/png,image/webp" tabindex="-1">
+              <img id="coverImg" alt="cover">
+              <div class="cover-ph" id="coverPh">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg>
+                <span>Drop or click to add art</span>
+              </div>
+            </div>
+            <div class="cover-actions">
+              <button class="link-btn" id="coverSearchBtn" tabindex="-1">Search online</button>
+              <button class="link-btn" onclick="applyToAll('cover')" tabindex="-1">Apply to queue</button>
+            </div>
+          </div>
+
+          <div class="hero-fields">
+            <div class="hero-top">
+              <span class="chip" id="fmtBadge">ready</span>
+            </div>
+            <div class="field">
+              <label>Title</label>
+              <input type="text" id="f-title" placeholder="Track title" tabindex="1">
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label>Artist <button class="all-btn" onclick="applyToAll('artist')" tabindex="-1">apply to all</button></label>
+                <input type="text" id="f-artist" placeholder="Artist" tabindex="2">
+              </div>
+              <div class="field">
+                <label>Album artist <button class="all-btn" onclick="applyToAll('albumartist')" tabindex="-1">apply to all</button></label>
+                <input type="text" id="f-albumartist" placeholder="Album artist" tabindex="3">
+              </div>
+            </div>
+            <div class="field">
+              <label>Album <button class="all-btn" onclick="applyToAll('album')" tabindex="-1">apply to all</button></label>
+              <input type="text" id="f-album" placeholder="Album title" tabindex="4">
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3 class="card-title">Details</h3>
+          <div class="row4">
+            <div class="field">
+              <label>Year <button class="all-btn" onclick="applyToAll('year')" tabindex="-1">all</button></label>
+              <input type="text" id="f-year" placeholder="2024" maxlength="4" tabindex="5">
+            </div>
+            <div class="field">
+              <label>Track #</label>
+              <input type="text" id="f-track" placeholder="01" tabindex="6">
+            </div>
+            <div class="field">
+              <label>Genre <button class="all-btn" onclick="applyToAll('genre')" tabindex="-1">all</button></label>
+              <input type="text" id="f-genre" placeholder="Genre" tabindex="7">
+            </div>
+            <div class="field">
+              <label>Rating <button class="all-btn" onclick="applyToAll('explicit')" tabindex="-1">all</button></label>
+              <label class="check-field">
+                <input type="checkbox" id="f-explicit" tabindex="8">
+                <span class="check-label">Explicit</span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <label>Comment</label>
+            <input type="text" id="f-comment" placeholder="Optional comment…" tabindex="11">
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h3 class="card-title">Lyrics</h3>
+            <div class="card-tools">
+              <button class="link-btn accent" id="fetchLyricsBtn" onclick="fetchLyrics()" tabindex="-1">⤓ Auto-fetch</button>
+              <button class="link-btn" id="geniusSearchBtn" tabindex="-1">Genius ↗</button>
+              <button class="link-btn" id="musixmatchSearchBtn" tabindex="-1">Musixmatch ↗</button>
+            </div>
+          </div>
+          <textarea id="f-lyrics" placeholder="Paste lyrics or auto-fetch…" tabindex="10"></textarea>
+        </section>
+
+        <section class="card">
+          <h3 class="card-title">Output</h3>
+          <div class="field">
+            <label>
+              Filename template
+              <span class="inline-tools">
+                <select class="tpl-preset" id="tplPreset" tabindex="-1"><option value="">Presets…</option></select>
+                <button class="all-btn" onclick="resetTemplate()" tabindex="-1">reset</button>
+              </span>
+            </label>
+            <div class="tpl-input-row">
+              <input class="tpl-input" id="tplInput" value="{track} - {artist} - {title}" spellcheck="false" tabindex="12">
+              <span class="tpl-ext" id="tplExt">.mp3</span>
+            </div>
+            <div class="tpl-tokens">
+              <button class="tpl-token" onclick="insertToken('{track}')" tabindex="-1">{track}</button>
+              <button class="tpl-token" onclick="insertToken('{title}')" tabindex="-1">{title}</button>
+              <button class="tpl-token" onclick="insertToken('{artist}')" tabindex="-1">{artist}</button>
+              <button class="tpl-token" onclick="insertToken('{album}')" tabindex="-1">{album}</button>
+              <button class="tpl-token" onclick="insertToken('{year}')" tabindex="-1">{year}</button>
+              <button class="tpl-token" onclick="insertToken('{genre}')" tabindex="-1">{genre}</button>
+            </div>
+            <div class="tpl-preview" id="tplPreview">— no file selected —</div>
+          </div>
+          <label class="check-field wide">
+            <input type="checkbox" id="f-bypass" tabindex="9">
+            <span class="check-label">Force lossless re-encode (ALAC) — bypasses iTunes Match</span>
+          </label>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Sticky action bar -->
+    <footer class="actions">
+      <button class="btn-secondary" id="scUploadBtn" disabled title="Upload the active track to SoundCloud" tabindex="15">☁ SoundCloud</button>
+      <button class="btn-secondary" id="zipBtn" disabled title="Package all files into one ZIP (Ctrl/Cmd+Shift+S)" tabindex="14">⎗ ZIP</button>
+      <button class="btn-primary" id="dlBtn" disabled title="Export all (Ctrl/Cmd+S)" tabindex="13">
+        <span>↓</span><span id="dlLabel">Export all</span>
+      </button>
+    </footer>
+  </main>
+
+  <!-- ── Player bar ── -->
+  <div class="player">
+    <button id="wsPlayBtn" class="play-btn" tabindex="-1" title="Play / pause (Space)">▶</button>
+    <div id="waveform"></div>
+  </div>
+
+  <!-- ── Status bar ── -->
+  <div class="statusbar" id="status">
+    <span class="dot" id="statusDot"></span>
+    <span id="statusMsg">Booting audio engine…</span>
+  </div>
+</div>
+
+<div class="drop-overlay" id="dropOverlay"><div class="drop-card">Drop audio files to add them</div></div>
+<div class="toast" id="toast"></div>
+
+<!-- Context menu (queue items) -->
+<div class="ctx-menu" id="ctxMenu">
+  <div class="ctx-label">Convert to</div>
+  <div class="ctx-item" id="ctx-mp3" onclick="ctxConvert('mp3')"><span class="ctx-fmt">MP3</span> MPEG Layer 3</div>
+  <div class="ctx-item" id="ctx-m4a" onclick="ctxConvert('m4a')"><span class="ctx-fmt">M4A</span> AAC / ALAC</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item" id="ctx-orig" onclick="ctxConvert('original')"><span class="ctx-fmt" style="color:var(--text-3)">SRC</span> Keep original format</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item danger" onclick="ctxRemove()">Remove from queue</div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop"></div>
+<div class="modal-box" id="convertModal">
+  <h3>Lossless format detected</h3>
+  <p>You added FLAC or WAV files. Convert them so they can securely accept metadata tags?</p>
+  <div class="modal-btns">
+    <button class="modal-btn" onclick="resolveModal('m4a')">→ M4A</button>
+    <button class="modal-btn" onclick="resolveModal('mp3')">→ MP3</button>
+    <button class="modal-btn" onclick="resolveModal('original')">Keep original</button>
+  </div>
+</div>
+
+<!-- Convert queue picker -->
+<div class="ctx-menu" id="convertQueueMenu">
+  <div class="ctx-label">Set all to format</div>
+  <div class="ctx-item" onclick="applyQueueFormat('mp3')"><span class="ctx-fmt">MP3</span> MPEG Layer 3</div>
+  <div class="ctx-item" onclick="applyQueueFormat('m4a')"><span class="ctx-fmt">M4A</span> AAC / ALAC</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item" onclick="applyQueueFormat('original')"><span class="ctx-fmt" style="color:var(--text-3)">SRC</span> Keep original formats</div>
+</div>
+
+<!-- Cover context menu -->
+<div class="cover-ctx-menu" id="coverCtxMenu">
+  <div class="ctx-label">Cover art</div>
+  <div class="ctx-item danger" id="coverCtxRemove" onclick="removeCover()">✕ &nbsp;Remove cover art</div>
+</div>
+
+<!-- Settings modal -->
+<div class="panel-modal" id="settingsModal">
+  <h3>Settings <button class="panel-modal-close" onclick="closePanel('settingsModal')" tabindex="-1">✕</button></h3>
+  <div class="settings-field">
+    <label>Last.fm API key</label>
+    <input type="text" id="lastfmKeyInput" placeholder="Paste your Last.fm API key">
+    <div class="field-note">Free, no approval needed — <a href="https://www.last.fm/api/account/create" target="_blank" rel="noopener">create one at last.fm/api/account/create ↗</a>. Powers cover-art search and Last.fm track matches. Without it, track and cover search still work via Apple Music.</div>
+  </div>
+  <div class="settings-field">
+    <label>SoundCloud OAuth token</label>
+    <input type="text" id="soundcloudTokenInput" placeholder="Paste a SoundCloud access token">
+    <div class="field-note">SoundCloud uploads need an OAuth access token tied to your account. Register an app at <a href="https://soundcloud.com/you/apps" target="_blank" rel="noopener">soundcloud.com/you/apps ↗</a>, complete their OAuth flow once, then paste the token here. Stored only on this computer.</div>
+  </div>
+  <button class="settings-save-btn" onclick="saveSettings()">Save</button>
+</div>
+
+<!-- Track search modal -->
+<div class="panel-modal" id="searchModal">
+  <h3>Find track <button class="panel-modal-close" onclick="closePanel('searchModal')" tabindex="-1">✕</button></h3>
+  <div class="search-row">
+    <input type="text" id="searchQueryInput" placeholder="Artist – title…">
+    <button id="searchGoBtn">Search</button>
+  </div>
+  <div class="result-list" id="searchResults">
+    <div class="result-empty">Search Apple Music &amp; Last.fm, then pick a match to fill in the fields.</div>
+  </div>
+</div>
+
+<!-- Cover search modal -->
+<div class="panel-modal" id="coverSearchModal">
+  <h3>Find cover art <button class="panel-modal-close" onclick="closePanel('coverSearchModal')" tabindex="-1">✕</button></h3>
+  <div class="search-row">
+    <input type="text" id="coverQueryInput" placeholder="Artist – album…">
+    <button id="coverSearchGoBtn">Search</button>
+  </div>
+  <div class="cover-result-grid" id="coverResults" style="min-height:60px;">
+    <div class="result-empty" style="grid-column:1/-1;">Search Apple Music &amp; Last.fm for artwork.</div>
+  </div>
+</div>
+
+<!-- Preview tags modal -->
+<div class="panel-modal" id="previewModal">
+  <h3>Preview tags <button class="panel-modal-close" onclick="closePanel('previewModal')" tabindex="-1">✕</button></h3>
+  <div class="preview-grid">
+    <img class="preview-cover" id="previewCoverImg" alt="">
+    <div class="preview-rows" id="previewRows"></div>
+  </div>
+  <div class="preview-filename" id="previewFilename"></div>
+</div>
+
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/jsmediatags.min.js"></script>
+<script src="vendor/browser-id3-writer.js"></script>
+<script src="vendor/ffmpeg/ffmpeg.js"></script>
+<script src="vendor/ffmpeg/util.js"></script>
+<script src="vendor/wavesurfer.min.js"></script>
+<script src="vendor/regions.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

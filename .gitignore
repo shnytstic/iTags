@@ -1,0 +1,5 @@
+node_modules/
+dist/
+src/vendor/
+.DS_Store
+tag editor.png

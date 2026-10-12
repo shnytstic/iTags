@@ -1,0 +1,39 @@
+{
+  "name": "itags",
+  "productName": "iTags",
+  "version": "1.0.0",
+  "description": "Audio metadata editor",
+  "main": "main.js",
+  "author": "Sheny",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "vendor": "node scripts/vendor.js",
+    "postinstall": "node scripts/vendor.js",
+    "dist": "electron-builder --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:linux": "electron-builder --linux --publish never"
+  },
+  "devDependencies": {
+    "@ffmpeg/core": "0.12.6",
+    "@ffmpeg/ffmpeg": "0.12.10",
+    "@ffmpeg/util": "0.12.1",
+    "browser-id3-writer": "4.4.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "jsmediatags": "^3.9.7",
+    "jszip": "^3.10.1",
+    "wavesurfer.js": "^7.8.0"
+  },
+  "build": {
+    "appId": "art.sheny.itags",
+    "productName": "iTags",
+    "files": ["main.js", "preload.js", "src/**/*", "package.json"],
+    "directories": { "output": "dist" },
+    "win": { "target": ["nsis", "zip"] },
+    "mac": { "target": ["dmg", "zip"], "category": "public.app-category.music" },
+    "linux": { "target": ["AppImage"], "category": "AudioVideo" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true }
+  }
+}
